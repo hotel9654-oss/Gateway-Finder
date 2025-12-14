@@ -118,7 +118,7 @@ git clone https://github.com/walterwhite-69/Gateway-Finder.git
 cd Gateway-Finder
 
 # Install dependencies
-pip install aiohttp beautifulsoup4 fake-useragent rich libsql-client
+pip install aiohttp beautifulsoup4 fake-useragent rich libsql-client cryptography
 ```
 
 <br>

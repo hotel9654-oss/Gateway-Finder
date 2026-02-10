@@ -15,6 +15,8 @@
 
 ---
 
+![Screenshot](Screenshot_1.png)
+
 ## 📋 Overview
 
 **GATE SCAN** is a powerful Python-based reconnaissance tool that leverages multiple search engines and specialized databases to discover live payment gateway implementations. With an animated, professionally designed terminal UI powered by Rich, it provides real-time scanning with intelligent filtering and dual-output logging. Script is encrypted due to stop it from skids

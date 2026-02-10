@@ -9,6 +9,8 @@
 
 **⚡ Advanced multi-engine search tool for discovering payment gateway implementations across the web**
 
+## Star the repository for future updates
+
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Configuration](#-configuration) • [Contributing](#-contributing)
 
 </div>

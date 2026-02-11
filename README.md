@@ -6,6 +6,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Alpha-yellow.svg?style=for-the-badge)
 ![Rich](https://img.shields.io/badge/UI-Rich_Terminal-magenta.svg?style=for-the-badge)
+![Downloads](https://img.shields.io/github/downloads/walterwhite-69/Gateway-Finder/total?style=for-the-badge&logo=github&color=8A2BE2)
 
 **⚡ Advanced multi-engine search tool for discovering payment gateway implementations across the web**
 
@@ -95,9 +96,17 @@
 - Windows/Linux/macOS
 - Google Custom Search API key (optional but recommended)
 
-### Clone Repository
+## 📦 Installation (From Release)
+
+1. Go to the Releases page:  
+   👉 https://github.com/walterwhite-69/Gateway-Finder/releases  
+
+2. Download the latest release source code or compiled package.
+
+3. Extract the downloaded file:
+
 ```bash
-git clone https://github.com/walterwhite-69/Gateway-Finder.git
+unzip Gateway-Finder.zip
 cd Gateway-Finder
 ```
 

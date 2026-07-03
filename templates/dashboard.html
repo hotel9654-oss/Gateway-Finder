@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gate Scan - Beast Mode Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            color: #b0c4de;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            color: #b0c4de;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00d4ff;
+            font-family: 'Monaco', monospace;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .chart-container h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .results-table th {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #00d4ff;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-table tr:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .gateway-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            color: #000;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00d4ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .export-btn {
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .export-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 GATE SCAN - BEAST MODE</h1>
+            <p>Payment Gateway Reconnaissance Dashboard</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Results</h3>
+                <div class="stat-value" id="total-results">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Results Today</h3>
+                <div class="stat-value" id="results-today">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Unique Gateways</h3>
+                <div class="stat-value" id="unique-gateways">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Avg Response Time</h3>
+                <div class="stat-value" id="avg-response-time">-</div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2>📊 Gateway Distribution</h2>
+            <canvas id="gatewayChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2>📈 7-Day Timeline</h2>
+            <canvas id="timelineChart"></canvas>
+        </div>
+        
+        <div>
+            <button class="export-btn" onclick="exportData()">📥 Export Results</button>
+        </div>
+        
+        <div class="chart-container">
+            <h2>🔍 Recent Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Gateway</th>
+                        <th>URL</th>
+                        <th>Status</th>
+                        <th>Found Date</th>
+                        <th>Response Time</th>
+                    </tr>
+                </thead>
+                <tbody id="results-tbody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px;">
+                            <div class="loading"></div> Loading...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Fetch and display statistics
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('total-results').textContent = data.total_results;
+                document.getElementById('results-today').textContent = data.results_today;
+                document.getElementById('unique-gateways').textContent = data.unique_gateways;
+                document.getElementById('avg-response-time').textContent = data.avg_response_time + 's';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Load and display gateway chart
+        async function loadGatewayChart() {
+            try {
+                const response = await fetch('/api/gateways');
+                const data = await response.json();
+                
+                const ctx = document.getElementById('gatewayChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(g => g.gateway.toUpperCase()),
+                        datasets: [{
+                            label: 'Found Instances',
+                            data: data.map(g => g.count),
+                            backgroundColor: 'rgba(0, 212, 255, 0.6)',
+                            borderColor: 'rgba(0, 212, 255, 1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#fff' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: { color: '#fff' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#fff' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading gateway chart:', error);
+            }
+        }
+        
+        // Load and display results table
+        async function loadResults() {
+            try {
+                const response = await fetch('/api/results?limit=20');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('results-tbody');
+                tbody.innerHTML = data.map(result => `
+                    <tr>
+                        <td><span class="gateway-badge">${result.gateway.toUpperCase()}</span></td>
+                        <td><a href="${result.url}" target="_blank" style="color: #00d4ff; text-decoration: none;">${result.url.substring(0, 50)}...</a></td>
+                        <td>${result.status_code || 'N/A'}</td>
+                        <td>${new Date(result.found_date).toLocaleDateString()}</td>
+                        <td>${result.response_time ? result.response_time.toFixed(2) + 's' : 'N/A'}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading results:', error);
+            }
+        }
+        
+        // Export data as JSON
+        async function exportData() {
+            try {
+                const response = await fetch('/api/export');
+                const data = await response.json();
+                
+                const jsonString = JSON.stringify(data, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `gateway-scan-results-${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+            } catch (error) {
+                console.error('Error exporting data:', error);
+            }
+        }
+        
+        // Initialize dashboard
+        window.addEventListener('load', () => {
+            loadStats();
+            loadGatewayChart();
+            loadResults();
+            
+            // Refresh every 30 seconds
+            setInterval(() => {
+                loadStats();
+                loadResults();
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
